@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "utils.h"
+#include <stdbool.h>
+
+/*déclarons variable global pour la table*/
 
 /* Fonction pour lire la case du morpion (ligne et colonne entre 1 et 3)*/
 int lire_case(int *ligne, int *colonne)
