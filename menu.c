@@ -26,6 +26,7 @@ void afficher_menu(void)
         {
         case 1:
             printf("Démarrage d'une nouvelle partie...\n");
+            deux_joueurs(); /* tmp test de mode*/
             break;
         case 2:
             printf("Chargement d'une partie sauvegardée...\n");

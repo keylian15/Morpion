@@ -4,5 +4,5 @@
 
 int  lire_case(int *ligne, int *colonne);
 void quitter_jeu(void);
-
+int deux_joueurs(void);
 #endif
