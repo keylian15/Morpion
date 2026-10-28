@@ -11,7 +11,6 @@ int deux_joueurs(void)
 {
     int ligne, colonne;
     int tour = 1;
-    int temp_var = 0;
     bool gameover = false;
 
     while(!gameover )
@@ -21,20 +20,20 @@ int deux_joueurs(void)
         {
             printf("tour du joueur 1:\n");
             lire_case(&ligne, &colonne);
-            grille[ligne][colonne]='X';
+            grille[ligne - 1 ][colonne - 1]='X';
             tour=2;
         }
         /* Tour du joueur 1 */
         else{
             printf("tour due joueur 2:\n");
             lire_case(&ligne,&colonne);
-            grille[ligne][colonne]='O';
+            grille[ligne - 1][colonne - 1]='O';
             tour=1;
         }
 
         /* Affichage de la table */
 
-        afficherGrill();
+        afficher_grille();
 
         /* Vérification de la réussite et affichage du résultat*/
         

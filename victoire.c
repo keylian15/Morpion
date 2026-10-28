@@ -32,25 +32,21 @@ char verifier_reussite(char board[3][3])
         
         if(board[i][0]==board[i][1] && board[i][1]==board[i][2] && board[i][0]!=' ')
         {
-            printf("Le joueur %c a gagné !\n", board[i][0]);
             return board[i][0]; /* Retourne le symbole du joueur gagnant */
         }
         /* Vérification des colonnes */
         if(board[0][i]==board[1][i] && board[1][i]==board[2][i] && board[0][i]!=' ')
         {
-            printf("Le joueur %c a gagné !\n", board[0][i]);
             return board[0][i]; /* Retourne le symbole du joueur gagnant */
         }
 
         /* Vérification des diagonales */
         if(board[0][0]==board[1][1] && board[1][1]==board[2][2] && board[0][0]!=' ')
         {
-            printf("Le joueur %c a gagné !\n", board[0][0]);
             return board[0][0]; /* Retourne le symbole du joueur gagnant */
         }
         if(board[0][2]==board[1][1] && board[1][1]==board[2][0] && board[0][2]!=' ')
         {
-            printf("Le joueur %c a gagné !\n", board[0][2]);
             return board[0][2]; /* Retourne le symbole du joueur gagnant */
         }
     }
