@@ -28,7 +28,7 @@ void afficher_menu(void)
         case 1:
             printf("Démarrage d'une nouvelle partie...\n");
     
-
+          
             initialiser_grille();
             afficher_grille();
 
