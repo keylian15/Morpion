@@ -27,12 +27,10 @@ void afficher_menu(void)
         {
         case 1:
             printf("Démarrage d'une nouvelle partie...\n");
-<<<<<<< HEAD
-            deux_joueurs(); /* tmp test de mode*/
-=======
+    
+          
             initialiser_grille();
             afficher_grille();
->>>>>>> origin/main
             break;
         case 2:
             printf("Chargement d'une partie sauvegardée...\n");
