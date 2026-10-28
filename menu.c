@@ -2,6 +2,7 @@
 #include "couleurs.h"
 #include "utils.h"
 #include "jeu.h"
+#include "grille.h"
 
 /* Affiche le menu principal et gère les choix de l'utilisateur */
 void afficher_menu(void)
@@ -26,6 +27,8 @@ void afficher_menu(void)
         {
         case 1:
             printf("Démarrage d'une nouvelle partie...\n");
+            initialiser_grille();
+            afficher_grille();
             break;
         case 2:
             printf("Chargement d'une partie sauvegardée...\n");
