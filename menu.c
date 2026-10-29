@@ -32,7 +32,7 @@ void afficher_menu(void)
           
             initialiser_grille();
             afficher_grille();
-            deux_joueurs();
+            deux_joueurs('A','B'); // Appel de la fonction pour le mode 2 joueurs avec les symboles personnalisés
             break;
         case 2:
             printf("Chargement d'une partie sauvegardée...\n");
