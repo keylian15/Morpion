@@ -8,5 +8,5 @@ int main(void)
     return 0;
 }
 
-// gcc -Wall -Wextra -std=c99 main.c menu.c jeu.c utils.c -o main.exe
+// gcc -Wall -Wextra -std=c99 main.c grille.c jeu.c menu.c mode_2j.c utils.c victoire.c -o main.exe
 // .\main.exe
