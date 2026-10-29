@@ -1,27 +1,34 @@
 
+#include "couleurs.h"
 #include <stdio.h>
 
 #include <stdbool.h>
 
-void afficher_resultat(char result)
+void afficher_resultat(int result)
 {
-    if (result == 'X')
+    if (result == 1)
     {
-        printf("Le joueur 1 a gagné !\n");
+        printf(VERT "Le joueur 1 a gagné !\n" RESET);
     }
-    else if (result == 'O')
+    else if (result == 2)
     {
-        printf("Le joueur 2 a gagné !\n");
+        printf(VERT "Le joueur 2 a gagné !\n" RESET);
     }
-    else if (result == 'D')
+    else if (result == 0)
     {
-        printf("Match nul !\n");
+        printf(JAUNE_CLAIR "Match nul !\n" RESET);
     }
 }
 
-/*fonction pour vérifier la réussite du jeu (peut être utilisée pour les statistiques du jeu)*/
 
-char verifier_reussite(char board[3][3])
+/* fonction pour vérifier si une ligne est gagnante */
+
+static int ligne_gagnante(char a, char b, char c)
+{
+    return (a == b && b == c && a != ' ');
+}
+
+int verifier_reussite(char board[3][3], int tour)
 {
 
     for(int i=0;i<3;i++)
@@ -30,24 +37,24 @@ char verifier_reussite(char board[3][3])
         /* pour cela c'est suffisant de voir is la première case est le même que le deuxième, et que le deuxième et identiqe à la troisième*/
         /* Vérification des lignes */
         
-        if(board[i][0]==board[i][1] && board[i][1]==board[i][2] && board[i][0]!=' ')
+        if(ligne_gagnante(board[i][0], board[i][1], board[i][2]))
         {
-            return board[i][0]; /* Retourne le symbole du joueur gagnant */
+            return tour; /* Retourne numero du joueur gagnant */
         }
         /* Vérification des colonnes */
-        if(board[0][i]==board[1][i] && board[1][i]==board[2][i] && board[0][i]!=' ')
+        if(ligne_gagnante(board[0][i], board[1][i], board[2][i]))
         {
-            return board[0][i]; /* Retourne le symbole du joueur gagnant */
+            return tour;
         }
 
         /* Vérification des diagonales */
-        if(board[0][0]==board[1][1] && board[1][1]==board[2][2] && board[0][0]!=' ')
+        if(ligne_gagnante(board[0][0], board[1][1], board[2][2]))
         {
-            return board[0][0]; /* Retourne le symbole du joueur gagnant */
+            return tour; 
         }
-        if(board[0][2]==board[1][1] && board[1][1]==board[2][0] && board[0][2]!=' ')
+        if(ligne_gagnante(board[0][2], board[1][1], board[2][0]))
         {
-            return board[0][2]; /* Retourne le symbole du joueur gagnant */
+            return tour;
         }
     }
 
@@ -58,9 +65,9 @@ char verifier_reussite(char board[3][3])
         {
             if(board[i][j]==' ')
             {
-                return ' '; /* on continue*/
+                return 3; /* on continue*/
             }
         }
     }
-    return 'D'; /* si tous les conditions cité ci-dessus sont non vérifié, on Retourne 'D'  */
+    return 0; /* si tous les conditions cité ci-dessus sont non vérifié, on Retourne 'D'  */
 }

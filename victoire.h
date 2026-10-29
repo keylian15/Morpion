@@ -1,7 +1,7 @@
-#ifdef VICTOIRE_H
+#ifndef VICTOIRE_H
 #define VICTOIRE_H
 
-char verifier_reussite(char board[3][3]);
-void afficher_resultat(char result);
+int verifier_reussite(char board[3][3], int tour);
+void afficher_resultat(int result);
 
 #endif // VICTOIRE_H
