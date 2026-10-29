@@ -5,13 +5,11 @@
 #include "utils.h"
 #include <stdbool.h>
 
-/*déclarons variable global pour la table*/
-
 /* Fonction pour lire la case du morpion (ligne et colonne entre 1 et 3)*/
 int lire_case(int *ligne, int *colonne)
 {
     printf("Entrez la ligne (1-3) : ");
-  
+
     if (!lire_int("", ligne))
     {
         return 0;
@@ -42,7 +40,6 @@ int lire_case(int *ligne, int *colonne)
     }
     return 1; // Retourne 1 si la lecture est réussie
 }
-
 
 /* Quitte le jeu simplement. */
 void quitter_jeu(void)
