@@ -3,8 +3,7 @@
 #include "grille.h"
 #include "jeu.h"
 
-char grille[3][3];
-
+char grille[TAILLE_GRILLE][TAILLE_GRILLE];
 /* Initialise la grille de morpion avec des espaces vides. */
 void initialiser_grille(void)
 {
