@@ -65,14 +65,19 @@ void afficher_menu(void)
         switch (choix)
         {
         case 1:
+        {
             printf("Démarrage d'une nouvelle partie...\n");
-            Partie *p = initialiser_partie('X', 'O');
+            Partie p;
+            if (initialiser_partie(&p, 'X', 'O', "2j") != 0)
+                printf(ROUGE "Attention : sauvegarde impossible, la partie ne sera pas enregistrée.\n" RESET);
             afficher_grille();
-
-            deux_joueurs(p);
+            deux_joueurs(&p);
             break;
+        }
         case 2:
             printf("Chargement d'une partie sauvegardée...\n");
+            // TODO : Actuellement ca charge la derniere partie, quand l'historique sera fait charger celle voulu.
+            
             break;
         case 3:
             printf("Re-visualisation d'une partie terminée...\n");

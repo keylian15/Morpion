@@ -15,9 +15,13 @@ typedef struct
     char j2;  /* symbole du joueur 2 */
     int etat; /* 3 = en cours, 0 = nul, 1/2 = gagnant */
     int nb_coups;
+    char id[32]; /* "AAAAMMJJ_HHMMSS", sert aussi de nom de fichier */
+    char mode[8]; /* "2j" ou "ordi" */
     Coup coups[9];
 } Partie;
 
-Partie* initialiser_partie(char j1, char j2);
+/* Initialise une nouvelle partie et cree son fichier de sauvegarde.
+ * Retourne : 0 = ok, -1 = erreur (id impossible, dossier ou fichier non cree) */
+int initialiser_partie(Partie *p, char j1, char j2, const char *mode);
 
 #endif

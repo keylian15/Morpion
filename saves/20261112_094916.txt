@@ -1,0 +1,5 @@
+mode=2j
+j1=X
+j2=O
+etat=3
+1 1 1

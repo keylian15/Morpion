@@ -6,6 +6,7 @@
 #include "jeu.h"
 #include "grille.h"
 #include "partie.h"
+#include "sauvegarde.h"
 
 /*fonction principal du jeu mode 2 joueurs*/
 
@@ -44,6 +45,8 @@ int deux_joueurs(Partie *p)
         afficher_grille();
 
         p->etat = verifier_reussite(grille, tour, p->nb_coups);
+        if (p->id[0] != '\0')
+            sauvegarder_partie(p);
 
         if (p->etat != 3)
         {
