@@ -4,6 +4,7 @@
 #include "jeu.h"
 #include "grille.h"
 #include "mode_2j.h"
+#include "partie.h"
 
 void help_and_rules(void)
 {
@@ -65,10 +66,10 @@ void afficher_menu(void)
         {
         case 1:
             printf("Démarrage d'une nouvelle partie...\n");
-
-            initialiser_grille();
+            Partie *p = initialiser_partie('X', 'O');
             afficher_grille();
-            deux_joueurs('X', 'O');
+
+            deux_joueurs(p);
             break;
         case 2:
             printf("Chargement d'une partie sauvegardée...\n");

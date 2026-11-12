@@ -5,20 +5,22 @@
 #include "victoire.h"
 #include "jeu.h"
 #include "grille.h"
+#include "partie.h"
 
 /*fonction principal du jeu mode 2 joueurs*/
 
-int deux_joueurs(char x, char o) // Les deux variables pour les deux joueurs avec leur propres symbole.
+int deux_joueurs(Partie *p)
 {
     int ligne, colonne;
-    int tour = 1;
+    int tour;
     char symbole;
     bool gameover = false;
 
     while (!gameover)
     {
-        /* Stockage du symbole du joueur courant */
-        symbole = (tour == 1) ? x : o;
+        /* J1 commence toujours : nb_coups pair -> J1, impair -> J2 */
+        tour = (p->nb_coups % 2 == 0) ? 1 : 2;
+        symbole = (tour == 1) ? p->j1 : p->j2;
 
         /* Tour du joueur 1 ou 2 */
         printf("Tour du joueur %d (symbole: %c):\n", tour, symbole);
@@ -28,29 +30,25 @@ int deux_joueurs(char x, char o) // Les deux variables pour les deux joueurs ave
             printf(ROUGE "Saisie invalide. Veuillez entrer un entier entre 1 et 3.\n" RESET);
         }
 
-        /* On verifie qu'il est vide */
-        if (grille[ligne - 1][colonne - 1] == ' ')
-        {
-            grille[ligne - 1][colonne - 1] = symbole;
-        }
-        else
+        /* On verifie que la case est vide */
+        if (grille[ligne - 1][colonne - 1] != ' ')
         {
             printf(ROUGE "Case déjà occupée. Veuillez réessayer.\n" RESET);
             continue; // Recommence le tour du même joueur
         }
 
+        grille[ligne - 1][colonne - 1] = symbole;
+        // On enregistre le coup dans la partie
+        p->coups[p->nb_coups++] = (Coup){tour, ligne, colonne};
+
         afficher_grille();
 
-        int result = verifier_reussite(grille, tour);
+        p->etat = verifier_reussite(grille, tour, p->nb_coups);
 
-        if (result != 3)
+        if (p->etat != 3)
         {
-            afficher_resultat(result);
+            afficher_resultat(p->etat);
             gameover = true;
-        }
-        else
-        {
-            tour = (tour == 1) ? 2 : 1;
         }
     }
     return 0;
