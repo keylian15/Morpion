@@ -13,4 +13,18 @@ int generer_id(char *id, size_t taille);
  * Retourne : 0 = ok, -1 = erreur (id vide, fichier non ouvert ou ecriture echouee) */
 int sauvegarder_partie(const Partie *p);
 
+#define CHARGER_OK 0
+#define CHARGER_ABSENT -1   /* aucun fichier / dossier */
+#define CHARGER_CORROMPU -2 /* fichier illisible ou incoherent */
+
+/* Cherche l'id de la partie la plus recente dans saves/.
+ * Retourne : 0 = ok (id rempli), -1 = aucune partie trouvee */
+int derniere_partie(char *id, size_t taille);
+
+/* Charge une partie depuis saves/<id>.txt (id == NULL : la derniere).
+ * Rejoue les coups : apres un chargement reussi, la grille globale est
+ * reconstruite et p->etat recalcule.
+ * Retourne : CHARGER_OK, CHARGER_ABSENT ou CHARGER_CORROMPU */
+int charger_partie(const char *id, Partie *p);
+
 #endif

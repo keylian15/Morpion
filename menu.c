@@ -5,6 +5,8 @@
 #include "grille.h"
 #include "mode_2j.h"
 #include "partie.h"
+#include "sauvegarde.h"
+#include "victoire.h"
 
 void help_and_rules(void)
 {
@@ -75,10 +77,25 @@ void afficher_menu(void)
             break;
         }
         case 2:
+        {
             printf("Chargement d'une partie sauvegardée...\n");
-            // TODO : Actuellement ca charge la derniere partie, quand l'historique sera fait charger celle voulu.
-            
+            Partie p;
+            int r = charger_partie(NULL, &p);
+
+            if (r == CHARGER_ABSENT)
+                printf(ROUGE "Aucune partie sauvegardée.\n" RESET);
+            else if (r == CHARGER_CORROMPU)
+                printf(ROUGE "Sauvegarde illisible ou corrompue.\n" RESET);
+            else
+            {
+                afficher_grille();
+                if (p.etat == 3)
+                    deux_joueurs(&p); /* reprise : le tour vient de nb_coups */
+                else
+                    afficher_resultat(p.etat); /* partie finie : on affiche seulement */
+            }
             break;
+        }
         case 3:
             printf("Re-visualisation d'une partie terminée...\n");
             break;
