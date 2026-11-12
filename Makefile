@@ -1,7 +1,7 @@
 CC      = gcc
 CFLAGS  = -Wall -Wextra -std=c99
 TARGET  = main.exe
-SRC     = main.c grille.c jeu.c menu.c mode_2j.c utils.c victoire.c
+SRC     = main.c grille.c jeu.c menu.c mode_2j.c utils.c victoire.c partie.c sauvegarde.c
 
 all: $(TARGET)
 
