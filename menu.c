@@ -7,6 +7,8 @@
 #include "partie.h"
 #include "sauvegarde.h"
 #include "victoire.h"
+#include "mode_IA.h"
+#include <string.h>
 
 void help_and_rules(void)
 {
@@ -69,11 +71,42 @@ void afficher_menu(void)
         case 1:
         {
             printf("Démarrage d'une nouvelle partie...\n");
+            /* Le joueur choisit entre le mode deux joueurs et le mode IA. */
+            int mode_choisi = 0;
+            printf("  " GRAS CYAN "1." RESET " Deux joueurs\n");
+            printf("  " GRAS CYAN "2." RESET " Contre l'IA facile\n");
+            printf("  " GRAS CYAN "3." RESET " Contre l'IA moyenne\n");
+
+            if (!lire_int("Mode : ", &mode_choisi))
+                break;
+
             Partie p;
-            if (initialiser_partie(&p, 'X', 'O', "2j") != 0)
-                printf(ROUGE "Attention : sauvegarde impossible, la partie ne sera pas enregistrée.\n" RESET);
-            afficher_grille();
-            deux_joueurs(&p);
+            if (mode_choisi == 1)
+            {
+                if (initialiser_partie(&p, 'X', 'O', "2j") != 0)
+                    printf(ROUGE "Attention : sauvegarde impossible, la partie ne sera pas enregistrée.\n" RESET);
+                afficher_grille();
+                deux_joueurs(&p);
+            }
+            else if (mode_choisi == 2)
+            {
+                /* Initialise une partie sauvegardee en mode contre l'IA. */
+                if (initialiser_partie(&p, 'X', 'O', "ordi") != 0)
+                    printf(ROUGE "Attention : sauvegarde impossible, la partie ne sera pas enregistrée.\n" RESET);
+                afficher_grille();
+                partie_contre_ia(&p, 1);
+            }
+            else if (mode_choisi == 3)
+            {
+                if (initialiser_partie(&p, 'X', 'O', "ia_mid") != 0)
+                    printf(ROUGE "Attention : sauvegarde impossible, la partie ne sera pas enregistrée.\n" RESET);
+                afficher_grille();
+                partie_contre_ia(&p, 2);
+            }
+            else
+            {
+                printf(ROUGE "\nMode invalide.\n\n" RESET);
+            }
             break;
         }
         case 2:
@@ -90,7 +123,14 @@ void afficher_menu(void)
             {
                 afficher_grille();
                 if (p.etat == 3)
-                    deux_joueurs(&p); /* reprise : le tour vient de nb_coups */
+                {
+                    if (strcmp(p.mode, "ordi") == 0)
+                        partie_contre_ia(&p, 1);
+                    else if (strcmp(p.mode, "ia_mid") == 0)
+                        partie_contre_ia(&p, 2);
+                    else
+                        deux_joueurs(&p);
+                }
                 else
                     afficher_resultat(p.etat); /* partie finie : on affiche seulement */
             }
