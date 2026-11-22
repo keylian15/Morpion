@@ -103,6 +103,10 @@ void afficher_menu(void)
                 afficher_grille();
                 partie_contre_ia(&p, 2);
             }
+            else if (mode_choisi == 7)
+            {
+                quitter_jeu();
+            }
             else
             {
                 printf(ROUGE "\nMode invalide.\n\n" RESET);

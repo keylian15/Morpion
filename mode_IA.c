@@ -38,32 +38,22 @@ int partie_contre_ia(Partie *p, int niveau)
         }
         else
         {
-            /* Tour de l'IA : conserve l'etat pour retrouver la case jouee. */
-            char grille_avant[TAILLE_GRILLE][TAILLE_GRILLE];
-
-            for (int l = 0; l < TAILLE_GRILLE; l++)
-                for (int c = 0; c < TAILLE_GRILLE; c++)
-                    grille_avant[l][c] = grille[l][c];
-
             printf("Tour de l'ordinateur (symbole: %c):\n", symbole);
             if (niveau == 2)
-                jouer_ia_moyenne(symbole);
+                jouer_ia_moyenne(symbole, &ligne, &colonne);
             else
-                jouer_ia_facile(symbole);
+                jouer_ia_facile(symbole, &ligne, &colonne);
 
-            ligne = 0;
-            colonne = 0;
-            for (int l = 0; l < TAILLE_GRILLE && ligne == 0; l++)
+            /* Ne sauvegarde jamais un coup si la grille est pleine. */
+            if (ligne == 0 || colonne == 0)
             {
-                for (int c = 0; c < TAILLE_GRILLE; c++)
-                {
-                    if (grille_avant[l][c] == ' ' && grille[l][c] == symbole)
-                    {
-                        ligne = l + 1;
-                        colonne = c + 1;
-                        break;
-                    }
-                }
+                p->etat = verifier_reussite(grille, tour, p->nb_coups);
+                if (p->id[0] != '\0')
+                    sauvegarder_partie(p);
+                if (p->etat != 3)
+                    afficher_resultat(p->etat);
+                partie_terminee = true;
+                continue;
             }
         }
 
