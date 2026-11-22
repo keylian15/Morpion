@@ -1,18 +1,11 @@
 #include "IA.h"
 #include "grille.h"
+#include "victoire.h"
 #include <stdlib.h>
-#include <time.h>
 
-void jouer_ia_facile(char symbole) {
+int jouer_ia_facile(char symbole, int *ligne, int *colonne) {
     int cases_vides[TAILLE_GRILLE * TAILLE_GRILLE];
     int nombre_cases_vides = 0;
-
-    /* Initialise une fois le hasard pour les choix de l'IA. */
-    static int graines_initialisee = 0;
-    if (!graines_initialisee) {
-        srand((unsigned int)time(NULL));
-        graines_initialisee = 1;
-    }
 
     // Parcourir la grille pour trouver les cases vides
     for (int ligne = 0; ligne < TAILLE_GRILLE; ligne++) {
@@ -23,85 +16,64 @@ void jouer_ia_facile(char symbole) {
     }
 
     if (nombre_cases_vides == 0)
-        return;
+        return 0;
     // Choisir une case vide aléatoire
     int choix = rand() % nombre_cases_vides;
     // Convertir l'index choisi en coordonnées de ligne et de colonne
-    int ligne = cases_vides[choix] / TAILLE_GRILLE;
-    int colonne = cases_vides[choix] % TAILLE_GRILLE;  
-    grille[ligne][colonne] = symbole;
+    int index = cases_vides[choix];
+    int ligne_case = index / TAILLE_GRILLE;
+    int colonne_case = index % TAILLE_GRILLE;
+    grille[ligne_case][colonne_case] = symbole;
+    *ligne = ligne_case + 1;
+    *colonne = colonne_case + 1;
+    return 1;
 }
 
-void jouer_ia_moyenne(char symbole) {
-    char symbole_joueur = (symbole == 'X') ? 'O' : 'X';
-    int coup_gagnant = -1;
-
-    /* Niveau moyen : il commet parfois une erreur et joue au hasard. */
-    if (rand() % 100 < 45) {
-        jouer_ia_facile(symbole);
-        return;
-    }
-
-    /* 1. Teste chaque case vide pour trouver une victoire immediate. */
+static int trouver_coup(char symbole, int tour)
+{
     for (int ligne = 0; ligne < TAILLE_GRILLE; ligne++) {
         for (int colonne = 0; colonne < TAILLE_GRILLE; colonne++) {
             if (grille[ligne][colonne] == ' ') {
                 grille[ligne][colonne] = symbole;
-
-                int gagnant =
-                    (grille[0][0] == symbole && grille[0][1] == symbole && grille[0][2] == symbole) ||
-                    (grille[1][0] == symbole && grille[1][1] == symbole && grille[1][2] == symbole) ||
-                    (grille[2][0] == symbole && grille[2][1] == symbole && grille[2][2] == symbole) ||
-                    (grille[0][0] == symbole && grille[1][0] == symbole && grille[2][0] == symbole) ||
-                    (grille[0][1] == symbole && grille[1][1] == symbole && grille[2][1] == symbole) ||
-                    (grille[0][2] == symbole && grille[1][2] == symbole && grille[2][2] == symbole) ||
-                    (grille[0][0] == symbole && grille[1][1] == symbole && grille[2][2] == symbole) ||
-                    (grille[0][2] == symbole && grille[1][1] == symbole && grille[2][0] == symbole);
-
+                int resultat = verifier_reussite(grille, tour, TAILLE_GRILLE * TAILLE_GRILLE);
                 grille[ligne][colonne] = ' ';
-                if (gagnant)
-                    coup_gagnant = ligne * TAILLE_GRILLE + colonne;
 
-                if (coup_gagnant != -1)
-                    break;
+                if (resultat == tour)
+                    return ligne * TAILLE_GRILLE + colonne;
             }
         }
-        if (coup_gagnant != -1)
-            break;
+    }
+    return -1;
+}
+
+int jouer_ia_moyenne(char symbole, int *ligne, int *colonne) {
+    char symbole_joueur = (symbole == 'X') ? 'O' : 'X';
+
+    /* Niveau moyen : il commet parfois une erreur et joue au hasard. */
+    if (rand() % 100 < 45) {
+        return jouer_ia_facile(symbole, ligne, colonne);
     }
 
-    if (coup_gagnant != -1) {
-        grille[coup_gagnant / TAILLE_GRILLE][coup_gagnant % TAILLE_GRILLE] = symbole;
-        return;
+    /* 1. Teste chaque case vide pour trouver une victoire immediate. */
+    int coup = trouver_coup(symbole, 2);
+    if (coup != -1) {
+        grille[coup / TAILLE_GRILLE][coup % TAILLE_GRILLE] = symbole;
+        *ligne = coup / TAILLE_GRILLE + 1;
+        *colonne = coup % TAILLE_GRILLE + 1;
+        return 1;
     }
 
     /* 2. Si aucune victoire immediate n'est possible, bloque le joueur. */
-    for (int ligne = 0; ligne < TAILLE_GRILLE; ligne++) {
-        for (int colonne = 0; colonne < TAILLE_GRILLE; colonne++) {
-            if (grille[ligne][colonne] == ' ') {
-                grille[ligne][colonne] = symbole_joueur;
-
-                int gagnant =
-                    (grille[0][0] == symbole_joueur && grille[0][1] == symbole_joueur && grille[0][2] == symbole_joueur) ||
-                    (grille[1][0] == symbole_joueur && grille[1][1] == symbole_joueur && grille[1][2] == symbole_joueur) ||
-                    (grille[2][0] == symbole_joueur && grille[2][1] == symbole_joueur && grille[2][2] == symbole_joueur) ||
-                    (grille[0][0] == symbole_joueur && grille[1][0] == symbole_joueur && grille[2][0] == symbole_joueur) ||
-                    (grille[0][1] == symbole_joueur && grille[1][1] == symbole_joueur && grille[2][1] == symbole_joueur) ||
-                    (grille[0][2] == symbole_joueur && grille[1][2] == symbole_joueur && grille[2][2] == symbole_joueur) ||
-                    (grille[0][0] == symbole_joueur && grille[1][1] == symbole_joueur && grille[2][2] == symbole_joueur) ||
-                    (grille[0][2] == symbole_joueur && grille[1][1] == symbole_joueur && grille[2][0] == symbole_joueur);
-
-                grille[ligne][colonne] = ' ';
-                if (gagnant) {
-                    grille[ligne][colonne] = symbole;
-                    return;
-                }
-            }
-        }
+    coup = trouver_coup(symbole_joueur, 1);
+    if (coup != -1) {
+        grille[coup / TAILLE_GRILLE][coup % TAILLE_GRILLE] = symbole;
+        *ligne = coup / TAILLE_GRILLE + 1;
+        *colonne = coup % TAILLE_GRILLE + 1;
+        return 1;
     }
 
     /* 3. Sinon, choisit une case vide au hasard comme en mode facile. */
-    jouer_ia_facile(symbole);
+    return jouer_ia_facile(symbole, ligne, colonne);
 }
 
 

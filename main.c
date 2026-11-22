@@ -1,9 +1,12 @@
 #include "utils.h"
 #include "menu.h"
+#include <stdlib.h>
+#include <time.h>
 
 int main(void)
 {
     init_console();
+    srand((unsigned int)time(NULL));
     afficher_menu();
     return 0;
 }
