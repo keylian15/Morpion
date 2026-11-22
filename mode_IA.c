@@ -39,14 +39,13 @@ int partie_contre_ia(Partie *p, int niveau)
         else
         {
             printf("Tour de l'ordinateur (symbole: %c):\n", symbole);
-            int coup_joue;
             if (niveau == 2)
-                coup_joue = jouer_ia_moyenne(symbole, &ligne, &colonne);
+                jouer_ia_moyenne(symbole, &ligne, &colonne);
             else
-                coup_joue = jouer_ia_facile(symbole, &ligne, &colonne);
+                jouer_ia_facile(symbole, &ligne, &colonne);
 
             /* Ne sauvegarde jamais un coup si la grille est pleine. */
-            if (!coup_joue)
+            if (ligne == 0 || colonne == 0)
             {
                 p->etat = verifier_reussite(grille, tour, p->nb_coups);
                 if (p->id[0] != '\0')
