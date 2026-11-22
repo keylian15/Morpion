@@ -30,12 +30,20 @@ void jouer_ia_facile(char symbole, int *ligne, int *colonne) {
     *colonne = colonne_case + 1;
 }
 
+/* Teste si 'symbole' gagne en jouant sur une case vide.
+ * On passe nb_coups = 9 volontairement à verifier_reussite : ça évite
+ * qu'elle renvoie 3 (partie en cours). Elle renvoie alors 'tour' s'il y a
+ * un alignement, 0 sinon. Ne pas "corriger" ce 9 en nb_coups réel.
+ * 'tour' doit être le numéro du joueur qui possède 'symbole'
+ * (1 = humain, 2 = IA), car verifier_reussite renvoie 'tour' et non
+ * le symbole gagnant. */
 static int trouver_coup(char symbole, int tour, int *ligne, int *colonne)
 {
     for (int ligne_case = 0; ligne_case < TAILLE_GRILLE; ligne_case++) {
         for (int colonne_case = 0; colonne_case < TAILLE_GRILLE; colonne_case++) {
             if (grille[ligne_case][colonne_case] == ' ') {
                 grille[ligne_case][colonne_case] = symbole;
+                // On passe volontairement nb_coups = 9 pour forcer verifier_reussite à renvoyer 0 ou tour, pas partie en cours (3)
                 int resultat = verifier_reussite(grille, tour, TAILLE_GRILLE * TAILLE_GRILLE);
                 grille[ligne_case][colonne_case] = ' ';
 
