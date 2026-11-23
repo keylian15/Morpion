@@ -45,13 +45,16 @@ int partie_contre_ia(Partie *p, int niveau)
                 jouer_ia_facile(symbole, &ligne, &colonne);
 
             /* L'IA ne peut jamais terminer sur une grille pleine. */
-            p->etat = verifier_reussite(grille, tour, p->nb_coups);
-            if (p->id[0] != '\0')
-                sauvegarder_partie(p);
-            if (p->etat != 3)
-                afficher_resultat(p->etat);
-            partie_terminee = true;
-            continue;
+            if (ligne == 0 || colonne == 0)
+            {
+                p->etat = verifier_reussite(grille, tour, p->nb_coups);
+                if (p->id[0] != '\0')
+                    sauvegarder_partie(p);
+                if (p->etat != 3)
+                    afficher_resultat(p->etat);
+                partie_terminee = true;
+                continue;
+            }
         }
 
         p->coups[p->nb_coups++] = (Coup){tour, ligne, colonne};
